@@ -44,11 +44,12 @@ func fire() -> void:
 func tick(delta: float) -> void:
 	spawn_clock += delta
 	fire_clock += delta
-	if fire_clock >= 0.28:
-		fire_clock = 0.0
+	while fire_clock >= 0.28:
+		fire_clock -= 0.28
 		fire()
-	if spawn_clock >= maxf(0.28, 0.83 - score * 0.008):
-		spawn_clock = 0.0
+	var spawn_interval := maxf(0.28, 0.83 - score * 0.008)
+	while spawn_clock >= spawn_interval:
+		spawn_clock -= spawn_interval
 		enemies.append(Vector2(randf_range(0.08, 0.92), -0.05))
 	for i in range(bullets.size() - 1, -1, -1):
 		bullets[i] += Vector2.UP * delta * 1.03
