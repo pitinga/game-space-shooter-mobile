@@ -82,9 +82,11 @@ func draw_game(canvas: CanvasItem, area: Rect2) -> void:
 		var p := area.position + Vector2(float((i * 127 + 43) % 1000) / 1000.0 * area.size.x, float((i * 317 + 91) % 1000) / 1000.0 * area.size.y)
 		canvas.draw_circle(p, 1.3 + float(i % 3), Color("bcd0ff"))
 	for enemy in enemies:
-		canvas.draw_circle(area.position + enemy * area.size, 18, Color("f57a7f"))
+		if enemy.y >= 18.0 / area.size.y and enemy.y <= 1.0 - 18.0 / area.size.y:
+			canvas.draw_circle(area.position + enemy * area.size, 18, Color("f57a7f"))
 	for shot in bullets:
-		canvas.draw_rect(Rect2(area.position + shot * area.size - Vector2(3, 10), Vector2(6, 20)), Color("9df6d4"))
+		var shot_rect := Rect2(area.position + shot * area.size - Vector2(3, 10), Vector2(6, 20)).intersection(area)
+		if shot_rect.has_area(): canvas.draw_rect(shot_rect, Color("9df6d4"))
 	var center := area.position + Vector2(player_x * area.size.x, area.size.y * 0.87)
 	canvas.draw_colored_polygon(PackedVector2Array([center + Vector2(0, -26), center + Vector2(-22, 21), center + Vector2(22, 21)]), Color("76d1f7"))
 	label(canvas, "Vidas: %d" % lives, area.position + Vector2(area.size.x * 0.5, 42), 25, Color("ffffff"))
